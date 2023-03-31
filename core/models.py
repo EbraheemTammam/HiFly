@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 
 
@@ -60,3 +62,46 @@ class Effect(models.Model):
 
     def __str__(self):
         return f'{str(self.person)} | {self.title}'
+
+def post_delete_signal(sender, instance, *args, **kwargs):
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
+
+def attachment_pre_save_signal(sender, instance, *args, **kwargs):
+    if not instance.pk: return False
+    try:
+        old = Attachment.objects.get(pk=instance.pk).file
+    except Attachment.DoesNotExist:
+        return False
+    if not old:
+        return False
+    new = instance.file
+    if not new:
+        instance.file = old
+        return True
+    if not old == new:
+        if os.path.isfile(old.path):
+            os.remove(old.path)
+
+def effect_pre_save_signal(sender, instance, *args, **kwargs):
+    if not instance.pk: return False
+    try:
+        old = Effect.objects.get(pk=instance.pk).file
+    except Effect.DoesNotExist:
+        return False
+    if not old:
+        return False
+    new = instance.file
+    if not new:
+        instance.file = old
+        return True
+    if not old == new:
+        if os.path.isfile(old.path):
+            os.remove(old.path)
+        
+
+models.signals.post_delete.connect(post_delete_signal, sender=Attachment)
+models.signals.post_delete.connect(post_delete_signal, sender=Effect)
+models.signals.pre_save.connect(attachment_pre_save_signal, sender=Attachment)
+models.signals.pre_save.connect(effect_pre_save_signal, sender=Effect)
