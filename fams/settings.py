@@ -37,7 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #   local
+    'accounts.apps.AccountsConfig',
+    'core.apps.CoreConfig',
 ]
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIERED = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
