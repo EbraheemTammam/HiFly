@@ -26,26 +26,36 @@ class Student(Person):
     level = models.IntegerField()
     semester = models.IntegerField()
 
+def attachment_upload_path(instance, filename):
+    return f'attachments/{instance.person.code}/{filename}'
+
 class Attachment(models.Model):
     title = models.CharField(max_length=100)
-    file = models.FileField()
     person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
         related_name='attachments',
     )
+    file = models.FileField(upload_to=attachment_upload_path)
 
     def __str__(self):
         return f'{str(self.person)} | {self.title}'
 
+def effect_upload_path(instance, filename):
+    return f'effects/{instance.person.code}/{filename}'
+
 class Effect(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
-    file = models.FileField(null=True, blank=True)
     person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
         related_name='effects',
+    )
+    file = models.FileField(
+        upload_to=effect_upload_path, 
+        null=True, 
+        blank=True
     )
 
     def __str__(self):
