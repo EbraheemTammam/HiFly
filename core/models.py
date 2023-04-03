@@ -27,6 +27,8 @@ class Employee(Person):
 class Student(Person):
     level = models.IntegerField()
     semester = models.IntegerField()
+    year_joined =models.PositiveIntegerField()
+    graduated = models.BooleanField(default=False)
 
 def attachment_upload_path(instance, filename):
     return f'attachments/{instance.person.code}/{filename}'
