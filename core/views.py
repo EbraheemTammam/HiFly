@@ -1,7 +1,6 @@
 from rest_framework.generics import (
     ListCreateAPIView, 
     RetrieveUpdateDestroyAPIView,
-    RetrieveDestroyAPIView,
 )
 
 from .serializers import (
@@ -40,7 +39,7 @@ class AttachmentListApiView(ListCreateAPIView):
             return Attachment.objects.filter(person__pk=employee)
         return Attachment.objects.all()
 
-class AttachmentDetailApiView(RetrieveDestroyAPIView):
+class AttachmentDetailApiView(RetrieveUpdateDestroyAPIView):
     queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
 
@@ -56,6 +55,6 @@ class EffectListApiView(ListCreateAPIView):
             return Effect.objects.filter(person__pk=employee)
         return Effect.objects.all()
 
-class EffectDetailApiView(RetrieveDestroyAPIView):
+class EffectDetailApiView(RetrieveUpdateDestroyAPIView):
     queryset = Effect.objects.all()
     serializer_class = EffectSerializer
