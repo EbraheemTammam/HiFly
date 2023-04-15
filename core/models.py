@@ -6,10 +6,10 @@ from django.db import models
 class Person(models.Model):
     code = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
+    gender = models.BooleanField()
     religion = models.CharField(max_length=10)
     social_status = models.CharField(max_length=10)
     degree = models.CharField(max_length=100)
-    age = models.IntegerField()
     birthdate = models.DateField()
     national_id = models.CharField(max_length=14)
     governorate = models.CharField(max_length=50)
@@ -24,9 +24,21 @@ class Person(models.Model):
 class Employee(Person):
     pass
 
+def employee_pre_save(sender, instance, *args, **kwargs):
+    if not instance.code:
+        instance.code = Employee.objects.last().code + 1
+
+models.signals.pre_save.connect(employee_pre_save, sender=Employee)
+
 class Student(Person):
     level = models.IntegerField()
     semester = models.IntegerField()
+
+def student_pre_save(sender, instance, *args, **kwargs):
+    if not instance.code:
+        instance.code = Employee.objects.last().code + 1
+
+models.signals.pre_save.connect(student_pre_save, sender=Student)
 
 def attachment_upload_path(instance, filename):
     return f'attachments/{instance.person.code}/{filename}'
