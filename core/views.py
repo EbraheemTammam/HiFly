@@ -12,8 +12,16 @@ from .serializers import (
 from .models import Student, Employee, Attachment, Effect
 
 class StudentListApiView(ListCreateAPIView):
-    queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+    def get_queryset(self,*args,**kwargs):
+        year=self.request.query_params.get('year')
+        graduated=self.request.query_params.get('graduated')
+        if graduated and year:
+            return Student.objects.filter(year_joined__lte=year,graduated=True)
+        if year:
+            return Student.objects.filter(year_joined__lte=year,graduated=False)
+        return Student.objects.all()
 
 class StudentDetailApiView(RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
