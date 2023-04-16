@@ -36,6 +36,8 @@ models.signals.pre_save.connect(employee_pre_save, sender=Employee)
 class Student(Person):
     level = models.IntegerField()
     semester = models.IntegerField()
+    year_joined =models.PositiveIntegerField()
+    graduated = models.BooleanField(default=False)
 
 def student_pre_save(sender, instance, *args, **kwargs):
     if not instance.code:
