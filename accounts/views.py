@@ -1,3 +1,6 @@
+import jwt
+
+from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework import status
@@ -23,22 +26,61 @@ from .permissions import Admin
 @authentication_classes([])
 @permission_classes([])
 def login_api_view(request):
+    """
+    login api takes input 'email' and 'password'
+    """
     user = authenticate(
         request, 
         email=request.data.get('email'),
         password=request.data.get('password')
     )
     if user:
-        try:
-            token = Token.objects.get(user=user)
-        except:
-            token = Token.objects.create(user=user)
+        token = Token.objects.filter(user=user)
+        token = token.first() if token.exists() else Token.objects.create(user=user)
         serializer = TokenSerializer(token).data
-        return Response(serializer, status=status.HTTP_200_OK)
+        encoded = jwt.encode(
+            {'auth': serializer},
+            settings.SECRET_KEY,
+            algorithm='HS256'
+        )
+        response = Response()
+        response.set_cookie(
+            key='hifly-access-token', 
+            value=encoded, 
+            samesite='None',
+            #secure=True,
+            httponly=True
+        )
+        response.data = {'details': 'logged in successfully'}
+        response.status = status.HTTP_200_OK
+        return response
     return Response(
         {'error': 'no user with this credintials'},
         status=status.HTTP_404_NOT_FOUND
     )
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def login_verify_api_view(request):
+    token = request.COOKIES.get('hifly-access-token')
+    if not token:
+        return Response({'details': 'no cookies provided'})
+    data = jwt.decode(
+        token,
+        settings.SECRET_KEY,
+        algorithms='HS256'
+    )
+    token = data.get('auth')
+    user = CustomUser.objects.filter(email=token['user']['email'])
+    if not user.exists():
+        return Response({'details': 'no user with this credintials'})
+    user = user.first()
+    token = Token.objects.filter(key=token['key'], user=user)
+    if token.exists():            
+        return Response({'details': 'user already logged in'})
+    return Response({'details': 'invalid token'})
 
 
 @api_view(['POST'])

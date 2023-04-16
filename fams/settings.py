@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e4wukp+wq*sb(h&x^-)8fn9zq6hs0d#dv+0+*662-6g@xxk@-v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #   3rd party
     'rest_framework',
+    'rest_framework.authtoken',
+    "drf_spectacular",
+    'corsheaders',
     #   local
     'accounts.apps.AccountsConfig',
     'core.apps.CoreConfig',
@@ -50,14 +53,48 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIERED = False
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'accounts.authentication.TokenAuth',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        'accounts.permissions.AdminOrReadOnly',
+    )
+}
+"""
+REST_USE_JWT = True
+SIMPLE_JWT = {
+    'AUTH_COOKIE': 'hifly-access-token', 
+    'AUTH_COOKIE_DOMAIN': None, 
+    'AUTH_COOKIE_SECURE': False, 
+    'AUTH_COOKIE_HTTP_ONLY' : True,         
+    'AUTH_COOKIE_SAMESITE': 'None', 
+}
+"""
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Server",
+    "DESCRIPTION": "hifly academy data management system",
+    "VERSION": "1.0.0",
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
 ]
 
 ROOT_URLCONF = 'fams.urls'
@@ -116,7 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Cairo'
 
 USE_I18N = True
 
