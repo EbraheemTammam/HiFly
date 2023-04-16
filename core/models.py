@@ -26,7 +26,10 @@ class Employee(Person):
 
 def employee_pre_save(sender, instance, *args, **kwargs):
     if not instance.code:
-        instance.code = Employee.objects.last().code + 1
+        if Employee.objects.all().count() == 0:
+            instance.code = 1
+        else:
+            instance.code = Employee.objects.last().code + 1
 
 models.signals.pre_save.connect(employee_pre_save, sender=Employee)
 
@@ -36,7 +39,10 @@ class Student(Person):
 
 def student_pre_save(sender, instance, *args, **kwargs):
     if not instance.code:
-        instance.code = Employee.objects.last().code + 1
+        if Student.objects.all().count() == 0:
+            instance.code = 1000
+        else:
+            instance.code = Student.objects.last().code + 1
 
 models.signals.pre_save.connect(student_pre_save, sender=Student)
 
