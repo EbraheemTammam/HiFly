@@ -14,6 +14,7 @@ psycopg2-binary = "^2.9.6"
 whitenoise = "^6.4.0"
 environs = "^9.5.0"
 djangorestframework = "^3.14.0"
+drf-spectacular = "^0.26.2"
 
 
 [build-system]
