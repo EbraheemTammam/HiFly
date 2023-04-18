@@ -4,11 +4,10 @@ from rest_framework.permissions import BasePermission
 class AdminOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         return (
-            request.user.admin
-            or request.user.is_staff 
+            request.user.is_admin
             or request.method == 'GET'
         )
 
 class Admin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.admin or request.user.is_staff
+        return request.user.is_admin

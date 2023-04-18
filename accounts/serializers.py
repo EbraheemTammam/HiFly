@@ -8,13 +8,18 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
         fields = (
+            'id',
             'email', 
+            'password',
             'first_name', 
             'last_name',
             'is_staff',
-            'is_college_head',
+            'is_admin',
         )
         read_only_fields = ('is_staff',)
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
 class TokenSerializer(ModelSerializer):
     user = UserSerializer()

@@ -23,7 +23,7 @@ urlpatterns = [
     path('students/', StudentListApiView.as_view()),
     path('students/<int:pk>/', StudentDetailApiView.as_view()),
     #   employee endpoints
-    path('emolyees/', EmployeeListApiView.as_view()),
+    path('employees/', EmployeeListApiView.as_view()),
     path('employees/<int:pk>/', EmployeeDetailApiView.as_view()),
     #   attachment endpoints
     path('attachments/', AttachmentListApiView.as_view()),
