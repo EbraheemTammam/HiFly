@@ -44,6 +44,7 @@ def login_api_view(request):
             algorithm='HS256'
         )
         response = Response()
+        """
         response.set_cookie(
             key='accessToken', 
             value=encoded, 
@@ -51,6 +52,7 @@ def login_api_view(request):
             #secure=True,
             httponly=True
         )
+        """
         response.data = {'accessToken': encoded}
         response.status = status.HTTP_200_OK
         return response

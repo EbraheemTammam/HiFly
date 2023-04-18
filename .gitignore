@@ -1,3 +1,4 @@
 token
 Pipfile*
 .venv
+db.sqlite3
