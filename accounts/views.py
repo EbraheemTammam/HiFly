@@ -45,13 +45,13 @@ def login_api_view(request):
         )
         response = Response()
         response.set_cookie(
-            key='hifly-access-token', 
+            key='accessToken', 
             value=encoded, 
             samesite='None',
             #secure=True,
             httponly=True
         )
-        response.data = {'details': 'logged in successfully'}
+        response.data = {'accessToken': encoded}
         response.status = status.HTTP_200_OK
         return response
     return Response(
@@ -60,13 +60,15 @@ def login_api_view(request):
     )
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
 def login_verify_api_view(request):
-    token = request.COOKIES.get('hifly-access-token')
+    #token = request.COOKIES.get('hifly-access-token')
+    token = request.data.get('accessToken')
     if not token:
-        return Response({'details': 'no cookies provided'})
+        return Response({'details': 'token was not provided'})
+    #    return Response({'details': 'no cookies provided'})
     data = jwt.decode(
         token,
         settings.SECRET_KEY,
@@ -79,7 +81,7 @@ def login_verify_api_view(request):
     user = user.first()
     token = Token.objects.filter(key=token['key'], user=user)
     if token.exists():            
-        return Response({'details': 'user already logged in'})
+        return Response(data['auth'])
     return Response({'details': 'invalid token'})
 
 
