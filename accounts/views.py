@@ -21,8 +21,6 @@ from .models import CustomUser
 from .serializers import TokenSerializer, UserSerializer
 from .permissions import Admin
 
-from django.contrib.auth.hashers import make_password
-
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -31,17 +29,6 @@ def login_api_view(request):
     """
     login api takes input 'email' and 'password'
     """
-    # just for test __ will be removed
-    if not CustomUser.objects.filter(email='admin@admin.com').exists():
-        user = CustomUser.objects.create(
-            email='admin@admin.com',
-            first_name='admin',
-            last_name='admin',
-            is_admin=True,
-            is_staff=True,
-            password=make_password('admin'),
-        )
-        print(user)
     user = authenticate(
         request, 
         email=request.data.get('email'),
@@ -113,7 +100,7 @@ def logout_api_view(request):
 class UserListApiView(ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, Admin]
+    permission_classes = []
 
 user_list_api_view = UserListApiView.as_view()
 
