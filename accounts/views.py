@@ -100,7 +100,7 @@ def logout_api_view(request):
 class UserListApiView(ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated, Admin]
 
 user_list_api_view = UserListApiView.as_view()
 
