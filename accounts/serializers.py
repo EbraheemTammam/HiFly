@@ -13,7 +13,6 @@ class UserSerializer(ModelSerializer):
             'password',
             'first_name', 
             'last_name',
-            'is_staff',
             'is_admin',
         )
         read_only_fields = ('is_staff',)
