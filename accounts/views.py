@@ -44,6 +44,7 @@ def login_api_view(request):
             algorithm='HS256'
         )
         response = Response()
+        """
         response.set_cookie(
             key='accessToken', 
             value=encoded, 
@@ -51,6 +52,7 @@ def login_api_view(request):
             secure=True,
             httponly=True
         )
+        """
         response.data = {'accessToken': encoded}
         response.status = status.HTTP_200_OK
         return response
@@ -64,9 +66,8 @@ def login_api_view(request):
 @authentication_classes([])
 @permission_classes([])
 def login_verify_api_view(request):
-    token = request.COOKIES.get('hifly-access-token')
-    if not token:
-        token = request.data.get('accessToken')
+    #token = request.COOKIES.get('hifly-access-token')
+    token = request.data.get('accessToken')
     if not token:
         return Response({'details': 'token was not provided'})
     #    return Response({'details': 'no cookies provided'})
