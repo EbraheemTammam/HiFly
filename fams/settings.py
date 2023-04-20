@@ -66,8 +66,8 @@ REST_FRAMEWORK = {
         'accounts.authentication.TokenAuth',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
-        #'accounts.permissions.AdminOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
+        'accounts.permissions.AdminOrReadOnly',
     )
 }
 """
