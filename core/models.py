@@ -85,8 +85,7 @@ class Effect(models.Model):
 
 def post_delete_signal(sender, instance, *args, **kwargs):
     if instance.file:
-        if os.path.isfile(instance.file.path):
-            os.remove(instance.file.path)
+        instance.file.delete(save=False)
 
 def attachment_pre_save_signal(sender, instance, *args, **kwargs):
     if not instance.pk: return False
@@ -121,7 +120,7 @@ def effect_pre_save_signal(sender, instance, *args, **kwargs):
             os.remove(old.path)
         
 
-#models.signals.post_delete.connect(post_delete_signal, sender=Attachment)
-#models.signals.post_delete.connect(post_delete_signal, sender=Effect)
+models.signals.post_delete.connect(post_delete_signal, sender=Attachment)
+models.signals.post_delete.connect(post_delete_signal, sender=Effect)
 models.signals.pre_save.connect(attachment_pre_save_signal, sender=Attachment)
 models.signals.pre_save.connect(effect_pre_save_signal, sender=Effect)
