@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     "drf_spectacular",
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
     #   local
     'accounts.apps.AccountsConfig',
     'core.apps.CoreConfig',
@@ -64,8 +66,8 @@ REST_FRAMEWORK = {
         'accounts.authentication.TokenAuth',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-        'accounts.permissions.AdminOrReadOnly',
+        #'rest_framework.permissions.IsAuthenticated',
+        #'accounts.permissions.AdminOrReadOnly',
     )
 }
 """
@@ -175,8 +177,16 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'hifly_media/'
+MEDIA_ROOT = BASE_DIR / 'hifly_media'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+}
+#if not DEBUG:
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

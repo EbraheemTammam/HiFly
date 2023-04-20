@@ -17,6 +17,8 @@ djangorestframework = "^3.14.0"
 drf-spectacular = "^0.26.2"
 django-cors-headers = "^3.14.0"
 pyjwt = "^2.6.0"
+cloudinary = "^1.32.0"
+dj3-cloudinary-storage = "^0.0.6"
 
 
 [build-system]
