@@ -62,7 +62,6 @@ ACCOUNT_USERNAME_REQUIERED = False
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
         'accounts.authentication.TokenAuth',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -70,16 +69,7 @@ REST_FRAMEWORK = {
         'accounts.permissions.AdminOrReadOnly',
     )
 }
-"""
-REST_USE_JWT = True
-SIMPLE_JWT = {
-    'AUTH_COOKIE': 'hifly-access-token', 
-    'AUTH_COOKIE_DOMAIN': None, 
-    'AUTH_COOKIE_SECURE': False, 
-    'AUTH_COOKIE_HTTP_ONLY' : True,         
-    'AUTH_COOKIE_SAMESITE': 'None', 
-}
-"""
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "Server",
     "DESCRIPTION": "hifly academy data management system",
@@ -108,6 +98,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', default=True)
 CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', default=True)
+CSRF_COOKIE_HTTPONLY = env('CSRF_COOKIE_HTTPONLY', default=True)
 SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT', default=True)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
 
