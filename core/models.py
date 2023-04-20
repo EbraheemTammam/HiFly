@@ -121,7 +121,7 @@ def effect_pre_save_signal(sender, instance, *args, **kwargs):
             os.remove(old.path)
         
 
-models.signals.post_delete.connect(post_delete_signal, sender=Attachment)
-models.signals.post_delete.connect(post_delete_signal, sender=Effect)
+#models.signals.post_delete.connect(post_delete_signal, sender=Attachment)
+#models.signals.post_delete.connect(post_delete_signal, sender=Effect)
 models.signals.pre_save.connect(attachment_pre_save_signal, sender=Attachment)
 models.signals.pre_save.connect(effect_pre_save_signal, sender=Effect)
