@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, IntegerField
+from rest_framework.serializers import ModelSerializer, IntegerField, FileField
 
 from .models import Student, Employee, Attachment, Effect
 
@@ -16,11 +16,13 @@ class EmployeeSerializer(ModelSerializer):
         fields = '__all__'
 
 class AttachmentSerializer(ModelSerializer):
+    file = FileField(required=False)
     class Meta:
         model = Attachment
         fields = '__all__'
 
 class EffectSerializer(ModelSerializer):
+    file = FileField(required=False)
     class Meta:
         model = Effect
         fields = '__all__'
